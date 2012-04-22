@@ -62,7 +62,8 @@ def anthro_product_urls(contents):
     end_quote = trimmed_contents.find('"', start_quote + 1)
     next_url = trimmed_contents[start_quote + 1:end_quote]
     anthro_product_url_list.append(next_url)
-    #anthro_product_urls(trimmed_contents[end_quote+1:])
+    rest_of_urls = anthro_product_urls(trimmed_contents[end_quote+1:])
+    anthro_product_url_list.extend(rest_of_urls)
     return anthro_product_url_list
        
 def get_price(filename):
@@ -91,6 +92,8 @@ def get_price(filename):
 
 contents = file_contents('/home/bethany/Jewelry_Crawler/jewelryaccessories-shopjewelry.jsp')
 assert anthro_product_urls(contents)[0] == "/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
+assert anthro_product_urls(contents)[1] == "/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
+assert anthro_product_urls(contents)[-1] == "/anthro/product/jewelryaccessories-shopjewelry/24111676.jsp", anthro_product_urls(contents)[-1]
 assert trim_contents(contents)[:27] == '<div class="category-item">'
 
 
