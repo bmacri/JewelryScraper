@@ -14,13 +14,13 @@ def get_urls(websites_file,filepath):
 
 
 def get_contents(url):
-    #retrieves the contents of the page using request and assigns the contents to the variable contents
+    #goes to a webpage, and saved the html on that page to the variable contents
     r = requests.get(url)
     contents = r.text
     return contents
 
 def generate_filename(url,file_date=None):
-    #generates a filename which will appear as 'date-url'
+    "generates a filename which will appear as 'date-url'"
     if file_date == None:
         file_date = date.today()
     filename = str(file_date) + '-' + url
@@ -39,6 +39,7 @@ def save_page(url,filepath):
     return 
 
 def file_contents(filename):
+    "opens a file (NOT a webpage, as in get_contents), reads the text of the file, assigns it to variable contents and returns contents"
     f = open(filename, 'r')
     contents = f.read()
     f.close()
@@ -53,6 +54,7 @@ def trim_contents(contents):
     return trimmed_contents
 
 def anthro_product_urls(contents):
+    domain = "http://www.anthropologie.com"
     anthro_product_url_list = []
     trimmed_contents = trim_contents(contents)   
     start_link = trimmed_contents.find('<a href=')
@@ -60,7 +62,7 @@ def anthro_product_urls(contents):
         return anthro_product_url_list
     start_quote = trimmed_contents.find('"',start_link)
     end_quote = trimmed_contents.find('"', start_quote + 1)
-    next_url = trimmed_contents[start_quote + 1:end_quote]
+    next_url = domain + trimmed_contents[start_quote + 1:end_quote]
     anthro_product_url_list.append(next_url)
     rest_of_urls = anthro_product_urls(trimmed_contents[end_quote+1:])
     anthro_product_url_list.extend(rest_of_urls)
@@ -88,13 +90,31 @@ def get_price(filename):
         product_dict[url] = dict_val
     return product_dict"""
 
-        
+def product_details(contents):
+    "takes the contents of a file and creates a dictionary with the string 'name' as key and the value as the name of the product"
+    product_dict = {}
+    # <meta property="og:title" content="Stacked Stone Drops"/>
+    start_meta = contents.find('<meta property="og:title" content=')
+    start_og = contents.find('"', start_meta + 1)
+    #print contents[start_og]
+    end_og = contents.find('"', start_og + 1)
+    #print contents[end_og] 
+    start_quote = contents.find('"', end_og + 1)
+    end_quote = contents.find('"', start_quote + 1)
+    product_name = contents[start_quote + 1:end_quote]
+    product_dict['name'] = product_name
+    return product_dict
 
 contents = file_contents('/home/bethany/Jewelry_Crawler/jewelryaccessories-shopjewelry.jsp')
 assert anthro_product_urls(contents)[0] == "/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
 assert anthro_product_urls(contents)[1] == "/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
 assert anthro_product_urls(contents)[-1] == "/anthro/product/jewelryaccessories-shopjewelry/24111676.jsp", anthro_product_urls(contents)[-1]
 assert trim_contents(contents)[:27] == '<div class="category-item">'
+
+
+contents = file_contents('stacked_stone.html')
+product = product_details(contents)
+assert product['name'] == "Stacked Stone Drops", product['name']
 
 
 #assert generate_filename('www.google.com') == '2012-04-15-www.google.com',generate_filename('www.google.com')
