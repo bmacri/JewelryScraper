@@ -2,6 +2,8 @@ from datetime import date
 import requests
 import string
 import re
+import MySQLdb
+import settings 
 
 def get_urls(websites_file,filepath):
     #reads urls in the websites.txt one by one, adding to a url list and then creating a filename using generate_filename
@@ -117,21 +119,32 @@ def get_product_id(contents):
         return None
     return product_id
 
+def product_details_to_db(product_dict):
+    conn = MySQLdb.connect(host= "localhost",
+                  user="root",
+                  passwd = settings.db_password,
+                  db="jewelryscraperdb")
+    cursor = conn.cursor()
+    #cursor.execute("SELECT *  FROM anooog1")
+    cursor.execute (" INSERT INTO products (product_name,product_id) VALUES (%s,%s) ", (product_dict['name'],product_dict['product_id']))
+    
+
 contents = file_contents('/home/bethany/Jewelry_Crawler/jewelryaccessories-shopjewelry.jsp')
-#assert anthro_product_urls(contents)[0] == "/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
-#assert anthro_product_urls(contents)[1] == "/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
-#assert anthro_product_urls(contents)[-1] == "/anthro/product/jewelryaccessories-shopjewelry/24111676.jsp", anthro_product_urls(contents)[-1]
-#assert trim_contents(contents)[:27] == '<div class="category-item">'
+assert anthro_product_urls(contents)[0] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
+assert anthro_product_urls(contents)[1] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
+assert anthro_product_urls(contents)[-1] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/24111676.jsp", anthro_product_urls(contents)[-1]
+assert trim_contents(contents)[:27] == '<div class="category-item">'
 
 
-#contents = file_contents('stacked_stone.html')
+contents = file_contents('stacked_stone.html')
 product = product_details(contents)
-#assert product['name'] == "Stacked Stone Drops", product['name']
+assert product['name'] == "Stacked Stone Drops", product['name']
 
 contents = file_contents('prod_id_with_letter.html')
 assert get_product_id(contents) == 'A23918493', get_product_id(contents)
 
-#assert generate_filename('www.google.com') == '2012-04-15-www.google.com',generate_filename('www.google.com')
+test_date = date(2012,4,15)
+assert generate_filename('www.google.com',file_date=test_date) == '2012-04-15-www.google.com',generate_filename('www.google.com')
  
 
 #get_urls('websites.txt','/home/bethany/Jewelry_Crawler')
