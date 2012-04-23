@@ -1,6 +1,7 @@
 from datetime import date
 import requests
 import string
+import re
 
 def get_urls(websites_file,filepath):
     #reads urls in the websites.txt one by one, adding to a url list and then creating a filename using generate_filename
@@ -92,33 +93,48 @@ def get_price(filename):
 
 def product_details(contents):
     "takes the contents of a file and creates a dictionary with the string 'name' as key and the value as the name of the product"
-    product_dict = {}
-    # <meta property="og:title" content="Stacked Stone Drops"/>
+    product_dict = {}    
+    product_dict['name'] = get_product_name(contents) 
+    product_dict['product_id'] = get_product_id(contents)  
+    return product_dict
+
+def get_product_name(contents):
     start_meta = contents.find('<meta property="og:title" content=')
     start_og = contents.find('"', start_meta + 1)
-    #print contents[start_og]
     end_og = contents.find('"', start_og + 1)
-    #print contents[end_og] 
     start_quote = contents.find('"', end_og + 1)
     end_quote = contents.find('"', start_quote + 1)
     product_name = contents[start_quote + 1:end_quote]
-    product_dict['name'] = product_name
-    return product_dict
+    return product_name
+    
+def get_product_id(contents):
+    find_canonical = contents.find('<link rel="canonical"')
+    contents = contents[find_canonical:]
+    match_product_id = re.search(r"[A-Z]?[0-9]+",contents)
+    if match_product_id:
+        product_id = match_product_id.group()
+    else:
+        return None
+    return product_id
 
 contents = file_contents('/home/bethany/Jewelry_Crawler/jewelryaccessories-shopjewelry.jsp')
-assert anthro_product_urls(contents)[0] == "/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
-assert anthro_product_urls(contents)[1] == "/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
-assert anthro_product_urls(contents)[-1] == "/anthro/product/jewelryaccessories-shopjewelry/24111676.jsp", anthro_product_urls(contents)[-1]
-assert trim_contents(contents)[:27] == '<div class="category-item">'
+#assert anthro_product_urls(contents)[0] == "/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
+#assert anthro_product_urls(contents)[1] == "/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
+#assert anthro_product_urls(contents)[-1] == "/anthro/product/jewelryaccessories-shopjewelry/24111676.jsp", anthro_product_urls(contents)[-1]
+#assert trim_contents(contents)[:27] == '<div class="category-item">'
 
 
-contents = file_contents('stacked_stone.html')
+#contents = file_contents('stacked_stone.html')
 product = product_details(contents)
-assert product['name'] == "Stacked Stone Drops", product['name']
+#assert product['name'] == "Stacked Stone Drops", product['name']
 
+contents = file_contents('prod_id_with_letter.html')
+assert get_product_id(contents) == 'A23918493', get_product_id(contents)
 
 #assert generate_filename('www.google.com') == '2012-04-15-www.google.com',generate_filename('www.google.com')
  
 
 #get_urls('websites.txt','/home/bethany/Jewelry_Crawler')
+
+#TODO: write out sql commands to create tables in a text file
     
