@@ -75,7 +75,9 @@ def product_details(contents):
     "takes the contents of a file and creates a dictionary with the string 'name' as key and the value as the name of the product"
     product_dict = {}    
     product_dict['name'] = get_product_name(contents) 
-    product_dict['product_id'] = get_product_id(contents)  
+    product_dict['product_id'] = get_product_id(contents)
+    product_dict['price'] = get_price(contents)
+    product_dict['image'] = get_image(contents)
     return product_dict
 
 def get_product_name(contents):
@@ -93,9 +95,9 @@ def ignore_also_like(contents):
     return contents
     
 def get_product_id(contents):
+    contents = ignore_also_like(contents)
     find_canonical = contents.find('<link rel="canonical"')
-    also_like = contents.find('you may also like')
-    contents = contents[find_canonical:also_like]
+    contents = contents[find_canonical:]
     match_product_id = re.search(r"[A-Z]?[0-9]+",contents)
     if match_product_id:
         product_id = match_product_id.group()
@@ -130,7 +132,7 @@ def product_details_to_db(product_dict):
     cursor.execute (" SELECT * FROM products WHERE product_id = %s ", (product_dict['product_id']))
     rows = cursor.fetchall()
     if len(rows) == 0: 
-        cursor.execute (" INSERT INTO products (product_name,product_id) VALUES (%s,%s) ", (product_dict['name'],product_dict['product_id']))
+        cursor.execute (" INSERT INTO products (product_name,product_id) VALUES (%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product['price'],product['image']))
     #TODO: need to select on retailer_id and on product_id to check that multiple retailers don't have the same product_id
 
 contents = file_contents('/home/bethany/Jewelry_Crawler/jewelryaccessories-shopjewelry.jsp')
