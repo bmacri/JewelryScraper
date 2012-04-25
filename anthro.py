@@ -86,6 +86,11 @@ def get_product_name(contents):
     end_quote = contents.find('"', start_quote + 1)
     product_name = contents[start_quote + 1:end_quote]
     return product_name
+
+def ignore_also_like(contents):
+    also_like = contents.find('you may also like')
+    contents = contents[:also_like]
+    return contents
     
 def get_product_id(contents):
     find_canonical = contents.find('<link rel="canonical"')
@@ -99,6 +104,7 @@ def get_product_id(contents):
     return product_id
 
 def get_price(contents):
+    contents = ignore_also_like(contents)
     match_get_price = re.search(r"\$[0-9]+\.[0-9][0-9]",contents)
     if match_get_price:
         price = match_get_price.group()
@@ -107,11 +113,11 @@ def get_price(contents):
     return price
 
 def get_image(contents):
-     match_get_image = re.search(r"\$[0-9]+\.[0-9][0-9]",contents)
-    if match_get_image:
-        price = match_get_image.group()
-    else:
-        return None
+    contents = ignore_also_like(contents)
+    find_img_tag = contents.find('<img')
+    start_img_url = contents.find("src='", find_img_tag)
+    end_img_url = contents.find("'",start_img_url+5)
+    image = contents[start_img_url+5:end_img_url]
     return image
 
 
@@ -138,8 +144,10 @@ contents = file_contents('stacked_stone.html')
 product = product_details(contents)
 assert product['name'] == "Stacked Stone Drops", product['name']
 
-contents = file_contents('stacked_stone.html')
 assert get_price(contents) == "$158.00", get_price(contents)
+
+assert get_image(contents) == 'http://images.anthropologie.com/is/image/Anthropologie/23918493_040_b?$product410x615$', get_image(contents)
+
 
 contents = file_contents('prod_id_with_letter.html')
 assert get_product_id(contents) == 'A23918493', get_product_id(contents)
