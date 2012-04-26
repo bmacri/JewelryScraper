@@ -148,7 +148,7 @@ def product_details_to_db(product_dict):
     cursor.execute (" SELECT * FROM products WHERE product_id = %s ", (product_dict['product_id']))
     rows = cursor.fetchall()
     if len(rows) == 0: 
-        cursor.execute (" INSERT INTO products (product_name,product_id) VALUES (%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product['price'],product['image'], product['description'))
+        cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description) VALUES (%s,%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product['price'],product['image'], product['description'))
     #TODO: need to select on retailer_id and on product_id to check that multiple retailers don't have the same product_id
 
 #----------------------------------------------------------------------------------------------------------------------------------
