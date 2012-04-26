@@ -148,11 +148,12 @@ def product_details_to_db(product_dict):
     cursor.execute (" SELECT * FROM products WHERE product_id = %s ", (product_dict['product_id']))
     rows = cursor.fetchall()
     if len(rows) == 0: 
-        cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description) VALUES (%s,%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product['price'],product['image'], product['description'))
+        cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description) VALUES (%s,%s,%s,%s,%s) "), (product_dict['name'],product_dict['product_id'],product['price'],product['image'], product['description'])
     #TODO: need to select on retailer_id and on product_id to check that multiple retailers don't have the same product_id
 
 #----------------------------------------------------------------------------------------------------------------------------------
 #TESTS:
+
 contents = file_contents('/home/bethany/Jewelry_Crawler/anthro_alljewelry.jsp')
 assert anthro_product_urls(contents)[0] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
 assert anthro_product_urls(contents)[1] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]

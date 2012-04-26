@@ -42,41 +42,63 @@ def file_contents(filename):
 def trim_contents(contents):
     begin_index = contents.find('<div class="products_all"')
     end_index = contents.find('function sortProducts() {')
-    trimmed_contents = contents[begin_index:end_index] 
-    return trimmed_contents
+    contents = contents[begin_index:end_index] 
+    return contents
 
-def anthro_product_urls(contents):
-    domain = "http://www.n-e-r-v-o-u-s.com"
+def nervous_product_urls(contents):
+    domain = "http://www.n-e-r-v-o-u-s.com/"
     nervous_product_url_list = []
-    trimmed_contents = trim_contents(contents)   
-    start_link = trimmed_contents.find('<a href=')
+    contents = trim_contents(contents)   
+    start_link = contents.find('<a href=')
     if start_link == -1:
         return nervous_product_url_list
-    start_quote = trimmed_contents.find('"',start_link)
-    end_quote = trimmed_contents.find('"', start_quote + 1)
-    next_url = domain + trimmed_contents[start_quote + 1:end_quote]
+    start_quote = contents.find('"',start_link)
+    end_quote = contents.find('"', start_quote + 1)
+    next_url = domain + contents[start_quote + 1:end_quote]
     nervous_product_url_list.append(next_url)
-    rest_of_urls = nervous_product_urls(trimmed_contents[end_quote+1:])
+    rest_of_urls = nervous_product_urls(contents[end_quote+1:])
     nervous_product_url_list.extend(rest_of_urls)
     return nervous_product_url_list
 
-#need a function to pick a url from the product_url_list
+def trim_product_page(contents):
+    begin_index = contents.find('<!-- RIGHT COLUMN')
+    end_index = contents.find('<!--- right_column -->')
+    contents = contents[begin_index:end_index]
+    return contents
+
+#def get_price(contents):
+    
+
+#def get_image(contents):
+    
+
+#def get_name(contents):
+
+def get_description(contents):
+    contents = trim_product_page(contents)
+    begin_desc = contents.find('<div class="p-description">')
+    end_desc = contents.find('</div>', begin_desc + 1 )
+    description = contents[begin_desc:end_desc]
+    return description
+    
+
+#def product_details
+
+#def product_details_to_db
 
 
 
+#--------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-save_page('http://n-e-r-v-o-u-s.com/shop/product_tags.php?tag=jewelry', '/home/bethany/Jewelry_Crawler')
-test_date = date(2012,4,25)
+#save_page('http://n-e-r-v-o-u-s.com/shop/product_tags.php?tag=jewelry', '/home/bethany/Jewelry_Crawler')
+#test_date = date(2012,4,25)
 contents = file_contents('2012-04-25-http:__n-e-r-v-o-u-s.com_shop_product_tags.php?tag=jewelry')
 assert contents[:22]  == '<!DOCTYPE HTML PUBLIC ', contents[:22]
+url_list = nervous_product_urls(contents)
+assert url_list[0] == "http://www.n-e-r-v-o-u-s.com/product.php?code=109&tag=jewelry&osCsid=lisrvsa68qfu25mmo5u3mju806", url_list[0]
 
+contents = file_contents('nervousproduct.html')
+assert get_description(contents) == 'An intricate round pendant with a complex network of veins radiating from its center.  Reticulate, meaning net-like, describes the complex branching patterns that govern the veins in leaves of most flowering plants.  Tiny tertiary veins interconnect the thick primary and secondary ones to create a redundant system for the transportation of water, sugars, and nutrients. The pattern was grown in our computer simulation of leaf venation and etched from a sheet of stainless steel. Comes with an 18" sterling silver or gold-filled chain.  Choose from unfinished stainless steel, black chromium plated or gold plated.', get_description(contents)
 
 
 
