@@ -78,6 +78,7 @@ def product_details(contents):
     product_dict['product_id'] = get_product_id(contents)
     product_dict['price'] = get_price(contents)
     product_dict['image'] = get_image(contents)
+    product_dict['description'] = get_description(contents)
     return product_dict
 
 def get_product_name(contents):
@@ -122,6 +123,21 @@ def get_image(contents):
     image = contents[start_img_url+5:end_img_url]
     return image
 
+def get_description(contents):
+    contents = ignore_also_like(contents)
+    desc_element = contents.find('<div id="productDescription">')
+    details_index = contents.find('DETAILS',desc_element)
+    contents = contents[details_index+7:]
+    non_angle = re.split(r"[<>]",contents)
+    description = []
+    i=0
+    while i<len(non_angle):
+        if i % 2 == 0:
+            description.append(non_angle[i].strip('\n '))
+        i = i + 1
+    description = filter(None, description)
+    description = " ".join(description)
+    return description
 
 def product_details_to_db(product_dict):
     conn = MySQLdb.connect(host= "localhost",
@@ -132,9 +148,11 @@ def product_details_to_db(product_dict):
     cursor.execute (" SELECT * FROM products WHERE product_id = %s ", (product_dict['product_id']))
     rows = cursor.fetchall()
     if len(rows) == 0: 
-        cursor.execute (" INSERT INTO products (product_name,product_id) VALUES (%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product['price'],product['image']))
+        cursor.execute (" INSERT INTO products (product_name,product_id) VALUES (%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product['price'],product['image'], product['description'))
     #TODO: need to select on retailer_id and on product_id to check that multiple retailers don't have the same product_id
 
+#----------------------------------------------------------------------------------------------------------------------------------
+#TESTS:
 contents = file_contents('/home/bethany/Jewelry_Crawler/anthro_alljewelry.jsp')
 assert anthro_product_urls(contents)[0] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/23918493.jsp", anthro_product_urls(contents)[0]
 assert anthro_product_urls(contents)[1] == "http://www.anthropologie.com/anthro/product/jewelryaccessories-shopjewelry/A23918493.jsp", anthro_product_urls(contents)[1]
@@ -150,13 +168,15 @@ assert get_price(contents) == "$158.00", get_price(contents)
 
 assert get_image(contents) == 'http://images.anthropologie.com/is/image/Anthropologie/23918493_040_b?$product410x615$', get_image(contents)
 
+assert get_description(contents) == 'Slabs of turquoise or jade dangle faceted quartz orbs. By Sura Jewelry. Quartz, 24k gold plated bronze, jade 1.5"L, 0.75"W Turkey', get_description(contents) 
 
 contents = file_contents('prod_id_with_letter.html')
 assert get_product_id(contents) == 'A23918493', get_product_id(contents)
 
 test_date = date(2012,4,15)
 assert generate_filename('www.google.com',file_date=test_date) == '2012-04-15-www.google.com',generate_filename('www.google.com')
- 
+
+assert get_description(contents) == 'Slabs of turquoise or jade dangle faceted quartz orbs. By Sura Jewelry. Quartz, 24k gold plated bronze, turquoise 1.5"L, 0.75"W Turkey', get_description(contents)
 
 #get_urls('websites.txt','/home/bethany/Jewelry_Crawler')
 
