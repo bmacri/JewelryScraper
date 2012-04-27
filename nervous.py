@@ -27,7 +27,7 @@ def save_page(url,filepath):
         raise Exception('url must start with http')
     contents = get_contents(url)
     filename = generate_filename(url)
-    filename = filename.replace('/','_')
+    filename = filename.replace('/','_').replace(':','_').replace('?','_')
     f = open(filepath + '/' + filename,'w')
     f.write(contents)
     f.close()
