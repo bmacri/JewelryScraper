@@ -1,0 +1,36 @@
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(255) DEFAULT NULL,
+  `retailer_id` int(11) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `price` decimal(6,2) DEFAULT NULL,
+  `product_id` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `description` varchar(21844) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `retailers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `listings_url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `url_content_snapshots` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) DEFAULT NULL,
+  `capture_date` datetime DEFAULT NULL,
+  `contents` longtext,
+  PRIMARY KEY (`id`)
+);
+
+
+
+
+    
+
+
+
+
+
