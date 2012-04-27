@@ -4,6 +4,7 @@ import string
 import re
 import MySQLdb
 import settings
+from lxml import etree
 
 def get_contents(url):
     #goes to a webpage, and saved the html on that page to the variable contents
@@ -105,9 +106,15 @@ contents = file_contents('nervousproduct.html')
 assert get_description(contents) == 'An intricate round pendant with a complex network of veins radiating from its center.  Reticulate, meaning net-like, describes the complex branching patterns that govern the veins in leaves of most flowering plants.  Tiny tertiary veins interconnect the thick primary and secondary ones to create a redundant system for the transportation of water, sugars, and nutrients. The pattern was grown in our computer simulation of leaf venation and etched from a sheet of stainless steel. Comes with an 18" sterling silver or gold-filled chain.  Choose from unfinished stainless steel, black chromium plated or gold plated.', get_description(contents)
 
 
+#tree = etree.HTML(page_contents)
+#find the element div with id content:
+# els = t.xpath('//div[@id="content"]')
+#els is a list containing the matches
+#print els[0].text
+#prints the text up to the first child tag
 
 
-
+#id example <h1 id="myHeader">Hello World!</h1>
 
 
 
