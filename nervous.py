@@ -4,13 +4,12 @@ import string
 import re
 import MySQLdb
 import settings
-from lxml import etree
+from ghost import Ghost
+ghost = Ghost()
+page, extra_resources = ghost.open("http://jeanphi.fr")
+assert page.http_status==200 and 'jeanphix' in ghost.content
 
-def get_contents(url):
-    #goes to a webpage, and saved the html on that page to the variable contents
-    r = requests.get(url)
-    contents = r.text
-    return contents
+
 
 def generate_filename(url,file_date=None):
     "generates a filename which will appear as 'date-url'"

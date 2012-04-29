@@ -1,4 +1,10 @@
+PURPOSE:
+
 This is my first programming project.  I thought it would be fun and useful to have a "search engine" dedicated solely to finding jewelry that matched the user's search terms.  The results shown will be from pre-vetted sites, my favorites and my friends' favorites on the web.  For example, if the user types "turquoise earrings", they will be shown a page of earrings that have turquoise in their product description.  The earrings shown will be from the one or more of the websites I've chosen to scrape.
+
+
+
+IMPORTED MODULES
 
 Regarding import settings - settings.py file is my password for MySQL.  Since this repository is public, I am not including the password.
 If you want to copy the code here, you can either:
@@ -9,6 +15,8 @@ If you want to copy the code here, you can either:
 I've included the createNewDb.txt file in this repository to show how to create mysql tables to hold the data from the sites you're scraping.
 
 
+
+MODULES:
 
 requests and MySQLdb are imported modules that are not built into Python.  They can be installed as follows:
 

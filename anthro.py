@@ -5,17 +5,6 @@ import re
 import MySQLdb
 import settings 
 
-def get_urls(websites_file,filepath):
-    #reads urls in the websites.txt one by one, adding to a url list and then creating a filename using generate_filename
-    f = open(websites_file,'r')
-    url_list = []
-    for url in f:
-        url_list.append(url)
-    for url in url_list:
-        generate_filename(url)
-    return
-
-
 def get_contents(url):
     #goes to a webpage, and saved the html on that page to the variable contents
     r = requests.get(url)
