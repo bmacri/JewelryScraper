@@ -110,9 +110,12 @@ def get_product_id(contents):
     return product_id
 
 def get_image(contents):
-    
-    
-    return contents
+    contents = trim_single_page(contents)
+    find_img_class = contents.find('<div class="product-img-box">')
+    begin_image = contents.find('<img src=', find_img_class + 1)
+    end_image = contents.find('alt=', begin_image + 1)
+    image = contents[begin_image + 10:end_image - 2]
+    return image
                                          
     
 
@@ -127,7 +130,7 @@ assert get_product_name(contents) == 'Young and Strong Expandable Wire Bangle - 
 assert get_price(contents) == '$28.00', get_price(contents)
 assert get_description(contents) == "The Young and Strong symbol is a tribute to remarkable women of courage. Wear this bangle to inspire empowerment, love, and healing through the power of positive thinking. Designed to wear alone, or to layer for a customized look, Alex and Ani's patented Expandable Wire Bangle is the most innovative concept in jewelry, allowing the wearer, with the slide of a hand, to adjust the bangle for a perfect fit. The Young and Strong Bangle is available in a Russian Gold and Russian Silver finish.", get_description(contents)
 assert get_product_id(contents) == 'CBD11YS03RS', get_product_id(contents)
-
+assert get_image(contents) == 'http://cdn.alexandani.com/media/catalog/product/cache/1/image/300x/9df78eab33525d08d6e5fb8d27136e95/C/B/CBD11YS03RS_5_3_5_1.JPG', get_image(contents)
 
 
 
