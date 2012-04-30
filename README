@@ -4,7 +4,7 @@ This is my first programming project.  I thought it would be fun and useful to h
 
 
 
-IMPORTED MODULES
+SETTINGS.PY:
 
 Regarding import settings - settings.py file is my password for MySQL.  Since this repository is public, I am not including the password.
 If you want to copy the code here, you can either:
