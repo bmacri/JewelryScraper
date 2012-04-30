@@ -40,7 +40,6 @@ def trim_contents(contents):
     return trimmed_contents
 
 def alexani_product_urls(contents):
-    domain = "http://www.alexandani.com"
     alexani_url_list = []
     trimmed_contents = trim_contents(contents)
     start_link = trimmed_contents.find('<a href=')
@@ -48,10 +47,10 @@ def alexani_product_urls(contents):
         return alexani_url_list
     start_quote = trimmed_contents.find('"', start_link)
     end_quote = trimmed_contents.find('"',start_quote+1)
-    next_url = domain + trimmed_contents[start_quote + 1:end_quote]
+    next_url = trimmed_contents[start_quote + 1:end_quote]
     alexani_url_list.append(next_url)
     rest_of_urls = alexani_product_urls(trimmed_contents[end_quote + 1:])
-    alexani_product_urls(rest_of_urls)
+    alexani_url_list.extend(rest_of_urls)
     return alexani_url_list
 
 def product_trim_page(contents):
@@ -62,14 +61,14 @@ def product_trim_page(contents):
     return contents
     
 
-'''def product_details(contents):
+def product_details(contents):
     product_dict = {}
     product_dict['name'] = get_product_name(contents)
     product_dict['product_id'] = get_product_id(contents) 
     product_dict['price'] = get_price(contents)
     product_dict['image'] = get_image(contents)
     product_dict['description'] = get_description(contents)
-    return product_dict'''
+    return product_dict
     
 def get_product_name(contents):
     contents = product_trim_page(contents)
@@ -79,10 +78,43 @@ def get_product_name(contents):
     product_name = contents[name_begin + 4:name_end]    
     return product_name
 
+def trim_single_page(contents):
+    start_trim = contents.find('<div class="product-shop">')
+    contents = contents[start_trim:]
+    return contents
+
+def get_price(contents):
+    contents = trim_single_page(contents)
+    start_price_class = contents.find('<span class="price">')
+    contents = contents[start_price_class:]
+    match_get_price = re.search(r"\$[0-9]+\.[0-9][0-9]",contents)
+    if match_get_price:
+        price = match_get_price.group()
+    else:
+        return None
+    return price
+
+def get_description(contents):
+    
+    return description
+
+def get_product_id(contents):
+    
+    return product_id
+
+def get_image(contents):
+    
+    
+    return contents
                                          
     
 
-#-----------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------------------
+
+contents = file_contents('alexandani_bracelets.html')
+product_url_list = alexani_product_urls(contents)
+assert product_url_list[0] == 'http://www.alexandani.com/bracelets/young-and-strong-expandable-wire-bangle-russian-silver.html', product_url_list[0]
 
 contents = file_contents('alexandani_single_bracelet.html')
 assert get_product_name(contents) == 'Young and Strong Expandable Wire Bangle - Russian Silver', get_product_name(contents)
+assert get_price(contents) == '$28.00', get_price(contents)
