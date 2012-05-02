@@ -1,10 +1,7 @@
-
-from datetime import date
-import requests
-import string
+from superparser import SuperParser
 import re
-import MySQLdb
 import settings
+
 
 class AlexAniParser(SuperParser):
     def __init__(self):
@@ -60,7 +57,7 @@ class AlexAniParser(SuperParser):
             return None
         return price
 
-    def get_description(contents):
+    def get_description(self,contents):
         start_class_desc = contents.find('<div class="short-description">')
         start_desc = contents.find('<br><br>', start_class_desc)
         end_desc = contents.find('<br><br>', start_desc + 1)
@@ -89,11 +86,11 @@ class AlexAniParser(SuperParser):
 
 alexani = AlexAniParser()
 
-contents = alexani.file_contents('alexandani_bracelets.html')
+contents = alexani.file_contents(settings.project_path + 'alexandani_bracelets.html')
 product_url_list = alexani.alexani_product_urls(contents)
-assert alexani.product_url_list[0] == 'http://www.alexandani.com/bracelets/young-and-strong-expandable-wire-bangle-russian-silver.html', alexani.product_url_list[0]
+assert product_url_list[0] == 'http://www.alexandani.com/bracelets/young-and-strong-expandable-wire-bangle-russian-silver.html', product_url_list[0]
 
-contents = alexani.file_contents('alexandani_single_bracelet.html')
+contents = alexani.file_contents(settings.project_path + 'alexandani_single_bracelet.html')
 assert alexani.get_product_name(contents) == 'Young and Strong Expandable Wire Bangle - Russian Silver', alexani.get_product_name(contents)
 assert alexani.get_price(contents) == '$28.00', alexani.get_price(contents)
 assert alexani.get_description(contents) == "The Young and Strong symbol is a tribute to remarkable women of courage. Wear this bangle to inspire empowerment, love, and healing through the power of positive thinking. Designed to wear alone, or to layer for a customized look, Alex and Ani's patented Expandable Wire Bangle is the most innovative concept in jewelry, allowing the wearer, with the slide of a hand, to adjust the bangle for a perfect fit. The Young and Strong Bangle is available in a Russian Gold and Russian Silver finish.", alexani.get_description(contents)
