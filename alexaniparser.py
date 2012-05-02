@@ -1,7 +1,6 @@
 from superparser import SuperParser
 import re
 import settings
-import websites
 
 
 class AlexAniParser(SuperParser):

@@ -1,6 +1,5 @@
 from superparser import SuperParser
 import settings
-import websites
 import re
 from datetime import date
 
@@ -129,8 +128,17 @@ def manual_test():
     anthro.product_details_to_db(details)
     anthro.product_details_to_db(details)
 
-url =
-def scrape_all():
+def create_crawl_list():
+    crawl_list = []    
+    f = open('websites.txt', 'r')
+    for website in f:
+        crawl_list.append(website)
+    return crawl_list
+
+assert crawl_list[0] == 'http://www.anthropologie.com/anthro/category/shop+all+jewelry/jewelryaccessories-shopjewelry.jsp', crawl_list[0]
+
+
+#def scrape_all(websites_list):
 
 
 
