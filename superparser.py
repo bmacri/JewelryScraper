@@ -24,8 +24,8 @@ class SuperParser:
         #writes the contents of a url to file created with generate file and saves it under the filepath given
         if not url.startswith('http'):
             raise Exception('url must start with http')
-        contents = get_contents(url)
-        filename = generate_filename(url)
+        contents = self.get_contents(url)
+        filename = self.generate_filename(url)
         filename = filename.replace('/','_')
         f = open(filepath + '/' + filename,'w')
         f.write(contents)
@@ -58,4 +58,4 @@ class SuperParser:
         cursor.execute (" SELECT * FROM products WHERE product_id = %s ", (product_dict['product_id']))
         rows = cursor.fetchall()
         if len(rows) == 0: 
-            cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description) VALUES (%s,%s,%s,%s,%s) "), (product_dict['name'],product_dict['product_id'],product['price'],product['image'], product['description'])
+            cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description) VALUES (%s,%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product_dict['price'],product_dict['image'], product_dict['description']))

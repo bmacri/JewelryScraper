@@ -116,6 +116,11 @@ assert anthro.generate_filename('www.google.com',file_date=test_date) == '2012-0
 
 assert anthro.get_description(contents) == 'Slabs of turquoise or jade dangle faceted quartz orbs. By Sura Jewelry. Quartz, 24k gold plated bronze, turquoise 1.5"L, 0.75"W Turkey', anthro.get_description(contents)
 
+def manual_test():
+    page = anthro.file_contents(settings.project_path + 'anthro_alljewelry.jsp')
+    details = anthro.product_details(page)
+    anthro.product_details_to_db(details)
+    anthro.product_details_to_db(details)
 
 
 
