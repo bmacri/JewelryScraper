@@ -47,6 +47,7 @@ class SuperParser:
         product_dict['price'] = self.get_price(contents)
         product_dict['image'] = self.get_image(contents)
         product_dict['description'] = self.get_description(contents)
+        product_dict['retailer_id'] = self.RETAILER_ID
         return product_dict
 
     def product_details_to_db(self,product_dict):
@@ -54,8 +55,8 @@ class SuperParser:
                       user="root",
                       passwd = settings.db_password,
                       db="jewelryscraperdb")
-        cursor = conn.cursor()
-        cursor.execute (" SELECT * FROM products WHERE product_id = %s ", (product_dict['product_id']))
+        cursor = conn.cursor()        
+        cursor.execute (" SELECT * FROM products WHERE product_id = %s AND retailer_id = %s ", (product_dict['product_id'],product_dict['retailer_id']))
         rows = cursor.fetchall()
         if len(rows) == 0: 
-            cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description) VALUES (%s,%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product_dict['price'],product_dict['image'], product_dict['description']))
+            cursor.execute (" INSERT INTO products (product_name,product_id,price,image,description,RETAILER_ID) VALUES (%s,%s,%s,%s,%s,%s) ", (product_dict['name'],product_dict['product_id'],product_dict['price'],product_dict['image'], product_dict['description'], product_dict['retailer_id']))

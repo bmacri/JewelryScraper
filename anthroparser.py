@@ -4,6 +4,9 @@ import re
 from datetime import date
 
 class AnthroParser(SuperParser):
+    
+    RETAILER_ID = 1
+
     def __init__(self):
         pass
 
@@ -59,6 +62,7 @@ class AnthroParser(SuperParser):
         match_get_price = re.search(r"\$[0-9]+\.[0-9][0-9]",contents)
         if match_get_price:
             price = match_get_price.group()
+            price = price[1:]
         else:
             return None
         return price
@@ -87,6 +91,8 @@ class AnthroParser(SuperParser):
         description = " ".join(description)
         return description
 
+   
+
 #------------------------------------------------------------------------------------------------------
 
 anthro = AnthroParser()
@@ -102,7 +108,7 @@ contents = anthro.file_contents(settings.project_path + 'stacked_stone.html')
 product = anthro.product_details(contents)
 assert product['name'] == "Stacked Stone Drops", product['name']
 
-assert anthro.get_price(contents) == "$158.00", anthro.get_price(contents)
+assert anthro.get_price(contents) == "158.00", anthro.get_price(contents)
 
 assert anthro.get_image(contents) == 'http://images.anthropologie.com/is/image/Anthropologie/23918493_040_b?$product410x615$', anthro.get_image(contents)
 
@@ -117,7 +123,7 @@ assert anthro.generate_filename('www.google.com',file_date=test_date) == '2012-0
 assert anthro.get_description(contents) == 'Slabs of turquoise or jade dangle faceted quartz orbs. By Sura Jewelry. Quartz, 24k gold plated bronze, turquoise 1.5"L, 0.75"W Turkey', anthro.get_description(contents)
 
 def manual_test():
-    page = anthro.file_contents(settings.project_path + 'anthro_alljewelry.jsp')
+    page = anthro.file_contents(settings.project_path + 'stacked_stone.html')
     details = anthro.product_details(page)
     anthro.product_details_to_db(details)
     anthro.product_details_to_db(details)

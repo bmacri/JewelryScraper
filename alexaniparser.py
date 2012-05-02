@@ -4,6 +4,9 @@ import settings
 
 
 class AlexAniParser(SuperParser):
+
+    RETAILER_ID = 2
+    
     def __init__(self):
         pass
 
