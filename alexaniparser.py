@@ -90,6 +90,15 @@ contents = alexani.file_contents(settings.project_path + 'alexandani_bracelets.h
 product_url_list = alexani.alexani_product_urls(contents)
 assert product_url_list[0] == 'http://www.alexandani.com/bracelets/young-and-strong-expandable-wire-bangle-russian-silver.html', product_url_list[0]
 
+contents = alexani.file_contents(settings.project_path + 'alexandani_necklaces.html')
+product_url_list = alexani.alexani_product_urls(contents)
+assert product_url_list[0] == 'http://www.alexandani.com/nyc-collection/power-of-peace-expandable-chain-necklace.html', product_url_list[0]
+
+contents = alexani.file_contents(settings.project_path + 'alexandani_vintage66.html')
+product_url_list = alexani.alexani_product_urls(contents)
+assert product_url_list[0] == 'http://www.alexandani.com/collections-vintage-sixty-six/daydream-wrap-rose.html', product_url_list[0]
+
+
 contents = alexani.file_contents(settings.project_path + 'alexandani_single_bracelet.html')
 assert alexani.get_product_name(contents) == 'Young and Strong Expandable Wire Bangle - Russian Silver', alexani.get_product_name(contents)
 assert alexani.get_price(contents) == '$28.00', alexani.get_price(contents)
