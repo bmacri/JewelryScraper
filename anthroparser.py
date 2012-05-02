@@ -1,5 +1,6 @@
 from superparser import SuperParser
 import settings
+import websites
 import re
 from datetime import date
 
@@ -128,7 +129,8 @@ def manual_test():
     anthro.product_details_to_db(details)
     anthro.product_details_to_db(details)
 
-
+url =
+def scrape_all():
 
 
 
