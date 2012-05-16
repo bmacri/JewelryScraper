@@ -44,7 +44,7 @@ class AlexAniParser(SuperParser):
         product_name = contents[name_begin + 4:name_end]    
         return product_name
 
-    def trim_single_page(self,contents):
+    def trim_single_page(self,contents):  #why did I write this?  see product_trim_page...
         start_trim = contents.find('<div class="product-shop">')
         contents = contents[start_trim:]
         return contents

@@ -27,6 +27,7 @@ CREATE TABLE url_content_snapshots (
 
 CREATE TABLE jewelrysites (
   id int(11) NOT NULL AUTO_INCREMENT,
+  retailer_id int(11) DEFAULT NULL,
   websiteurl varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
