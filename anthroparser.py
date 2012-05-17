@@ -1,7 +1,7 @@
 from superparser import SuperParser
 import settings
 import re
-from datetime import date
+from datetime import date #used for test
 
 class AnthroParser(SuperParser):
     
