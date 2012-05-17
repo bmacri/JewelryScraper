@@ -1,0 +1,7 @@
+Winzleberg
+    -no way to get all products of a certain type on one page, so will have to loop through pages (this is why my asserts for the product_url_list  are resulting in errors)
+
+Nervous 
+    -I can't get to the price in the html, so I'll need to find a way to scrape the rendered page
+
+
