@@ -38,7 +38,7 @@ class WinzlebergParser(SuperParser):
 
     def get_product_name(self,contents):
         contents = self.product_trim_page(contents)
-        find_product_name = contents.find('<span class="title"')
+        find_product_name = contents.find('class="title"')
         name_begin = contents.find('>',find_product_name)
         name_end = contents.find('<', name_begin + 1)
         product_name = contents[name_begin + 1:name_end]
@@ -83,7 +83,7 @@ winzleberg = WinzlebergParser()
 
 contents = winzleberg.file_contents(settings.project_path + 'winzleberg_necklaces.html')
 product_url_list = winzleberg.winzleberg_product_urls(contents)
-#assert product_url_list[0] == 'http://www.jessicawinzelberg.com/collections/category-necklaces/products/arabesque-candy-necklace-2', product_url_list[0]
+assert product_url_list[0] == 'http://www.jessicawinzelberg.com/collections/category-necklaces/products/arabesque-candy-necklace-2', product_url_list[0]
 
 contents = winzleberg.file_contents(settings.project_path + 'winzleberg_earrings.html')
 product_url_list = winzleberg.winzleberg_product_urls(contents)
